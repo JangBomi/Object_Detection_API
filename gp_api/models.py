@@ -22,3 +22,10 @@ class Notes(models.Model):
 
     def __str__(self):
         return self.text
+
+class User(models.Model):
+    name = models.CharField(max_length=255)
+    id = models.CharField(max_length=255)
+    password = models.CharField(max_length=255)
+    emailAddress = models.CharField(max_length=255)
+    birthDate = models.DateField('yyyymmdd')
