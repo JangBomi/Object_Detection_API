@@ -23,9 +23,39 @@ class Notes(models.Model):
     def __str__(self):
         return self.text
 
+
 class User(models.Model):
     name = models.CharField(max_length=255)
-    id = models.CharField(max_length=255)
+    userId = models.CharField(max_length=255)
     password = models.CharField(max_length=255)
     emailAddress = models.CharField(max_length=255)
     birthDate = models.DateField('yyyymmdd')
+
+    def __str__(self):
+        return self.name
+
+
+class Record(models.Model):
+    title = models.CharField(max_length=255)
+    startTime = models.DateTimeField()
+    endTime = models.DateTimeField
+    recordNum = models.IntegerField()
+    etc = models.CharField(max_length=255)
+    userId = models.ForeignKey(
+        User, related_name="user", on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return self.title
+
+
+class RecordDetail(models.Model):
+    detectedItem = models.CharField(max_length=255)
+    image = models.CharField(max_length=255)
+    captureTime = models.DateTimeField()
+    recordId = models.ForeignKey(
+        Record, related_name="record", on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return self.detectedItem
