@@ -1,7 +1,7 @@
 
 from django.urls import path
 from django.conf.urls import url
-from .views import NoteViewSet, RegistrationAPI, LoginAPI, UserAPI
+from .views import NoteViewSet, RegistrationAPI, UserAPI
 
 from . import views
 
@@ -19,8 +19,8 @@ urlpatterns = [
     url("^notes/$", note_list, name="note-list"),
     url("^notes/(?P<pk>[0-9]+)/$", note_detail, name="note-detail"),
     url("^auth/register/$", RegistrationAPI.as_view()),
-    url("^auth/login/$", LoginAPI.as_view()),
     url("^auth/user/$", UserAPI.as_view()),
     path('create/', views.createUser),
+    path('login/', views.login),
 ]
 

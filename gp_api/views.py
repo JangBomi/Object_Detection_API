@@ -12,7 +12,7 @@ from .serializers import (
     NoteSerializer,
     CreateUserSerializer,
     UserSerializer,
-    LoginUserSerializer,
+    LoginSerializer,
 )
 
 
@@ -52,6 +52,24 @@ def createUser(request):
         return Response({"message": "duplicate email"}, status=status.HTTP_409_CONFLICT)
 
 
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def login(request):
+    if request.method == 'POST':
+        serializer = LoginSerializer(data=request.data)
+
+        if not serializer.is_valid(raise_exception=True):
+            return Response({"message": "Request Body Error."}, status=status.HTTP_409_CONFLICT)
+        if serializer.validated_data['email'] == "None":
+            return Response({'message': 'fail'}, status=status.HTTP_200_OK)
+
+        response = {
+            'success': 'True',
+            'token': serializer.data['token']
+        }
+        return Response(response, status=status.HTTP_200_OK)
+
+
 class RegistrationAPI(generics.GenericAPIView):
     serializer_class = CreateUserSerializer
 
@@ -72,21 +90,21 @@ class RegistrationAPI(generics.GenericAPIView):
         )
 
 
-class LoginAPI(generics.GenericAPIView):
-    serializer_class = LoginUserSerializer
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data
-        return Response(
-            {
-                "user": UserSerializer(
-                    user, context=self.get_serializer_context()
-                ).data,
-                "token": AuthToken.objects.create(user)[1],
-            }
-        )
+# class LoginAPI(generics.GenericAPIView):
+#     serializer_class = LoginUserSerializer
+#
+#     def post(self, request, *args, **kwargs):
+#         serializer = self.get_serializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         user = serializer.validated_data
+#         return Response(
+#             {
+#                 "user": UserSerializer(
+#                     user, context=self.get_serializer_context()
+#                 ).data,
+#                 "token": AuthToken.objects.create(user)[1],
+#             }
+#         )
 
 
 class UserAPI(generics.RetrieveAPIView):

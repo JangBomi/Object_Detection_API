@@ -33,18 +33,18 @@ class CreateUserSerializer(serializers.Serializer):
 
 
 class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField(max_length=64)
+    email = serializers.CharField(max_length=64)
     password = serializers.CharField(max_length=128, write_only=True)
     token = serializers.CharField(max_length=255, read_only=True)
 
     def validate(self, data):
-        username = data.get("username", None)
+        email = data.get("email", None)
         password = data.get("password", None)
-        user = authenticate(username=username, password=password)
+        user = authenticate(email=email, password=password)
 
         if user is None:
             return {
-                'username': 'None'
+                'email': 'None'
             }
         try:
             payload = JWT_PAYLOAD_HANDLER(user)
@@ -55,7 +55,7 @@ class LoginSerializer(serializers.Serializer):
                 'User with given email and password does not exists'
             )
         return {
-            'username': user.username,
+            'email': user.email,
             'token': jwt_token
         }
 
@@ -101,12 +101,12 @@ class UserSerializer(serializers.ModelSerializer):
 
 # 로그인 시리얼라이저
 
-class LoginUserSerializer(serializers.Serializer):
-    username = serializers.CharField()
-    password = serializers.CharField()
-
-    def validate(self, data):
-        user = authenticate(**data)
-        if user and user.is_active:
-            return user
-        raise serializers.ValidationError("Unable to log in with provided credentials.")
+# class LoginUserSerializer(serializers.Serializer):
+#     username = serializers.CharField()
+#     password = serializers.CharField()
+#
+#     def validate(self, data):
+#         user = authenticate(**data)
+#         if user and user.is_active:
+#             return user
+#         raise serializers.ValidationError("Unable to log in with provided credentials.")
