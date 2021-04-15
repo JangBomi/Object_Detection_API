@@ -2,6 +2,9 @@
 pip install -r requirements.txt
 <br>
 
+## requirements.txt 생성
+pip freeze > requirements.txt
+
 # 시작
 python manage.py runserver
 
