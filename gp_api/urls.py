@@ -23,5 +23,6 @@ urlpatterns = [
     path('signup', views.createUser),
     path('signin', views.login),
     path('home/record', views.record),
+    path('home/record/<pk>', views.recordDetail)
 ]
 

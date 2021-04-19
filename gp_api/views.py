@@ -13,7 +13,8 @@ from .serializers import (
     CreateUserSerializer,
     UserSerializer,
     LoginSerializer,
-    RecordSerializer
+    RecordSerializer,
+    RecordDetailSerializer
 )
 
 
@@ -74,7 +75,8 @@ def login(request):
 #data=request.query_param
 
 
-
+@api_view(['POST', 'GET'])
+@permission_classes([AllowAny])
 def record(request):
     if request.method == 'GET':
         serializer = RecordSerializer()
@@ -103,11 +105,15 @@ def record(request):
         return Response(response, status=status.HTTP_201_CREATED)
 
 
-@api_view(['POST', 'GET'])
-@permission_classes([AllowAny])
-def detailRecord(request):
+@api_view(['POST'])
+def recordDetail(request):
     if request.method == 'POST':
-        serializer = DetailRecordSerializer(data=request.data)
+        serializer = RecordDetailSerializer(request.data)
+
+        if not serializer.is_valid(raise_exception=True):
+            return Response({"success": False, "message": "Request Body Error."}, status=status.HTTP_409_CONFLICT)
+
+
 
 
 class RegistrationAPI(generics.GenericAPIView):

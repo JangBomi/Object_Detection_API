@@ -64,6 +64,7 @@ class RecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = Record
         fields = (
+            'id',
             'title',
             'startTime',
             'endTime',
@@ -97,6 +98,19 @@ class RecordSerializer(serializers.ModelSerializer):
         record = RecordSerializer(queryset, many=True)
 
         return record.data
+
+
+class RecordDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecordDetail
+        fields = (
+            'id',
+            'detectedItem',
+            'image',
+            'captureTime',
+            'recordId'
+        )
+    
 
 
 
