@@ -53,7 +53,7 @@ def createUser(request):
         return Response({"message": "duplicate email"}, status=status.HTTP_409_CONFLICT)
 
 
-@api_view(['POST'])
+@api_view(['POST', 'GET'])
 @permission_classes([AllowAny])
 def login(request):
     if request.method == 'POST':
@@ -106,14 +106,22 @@ def record(request):
 
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def recordDetail(request):
     if request.method == 'POST':
-        serializer = RecordDetailSerializer(request.data)
+        serializer = RecordDetailSerializer(data=request.data)
 
         if not serializer.is_valid(raise_exception=True):
-            return Response({"success": False, "message": "Request Body Error."}, status=status.HTTP_409_CONFLICT)
+            return Response({"success": False, "message": "Error."}, status=status.HTTP_409_CONFLICT)
 
+        serializer.save()
 
+        response = {
+            'success': True,
+            'message': "successfully save record detail"
+        }
+
+        return Response(response, status=status.HTTP_201_CREATED)
 
 
 class RegistrationAPI(generics.GenericAPIView):

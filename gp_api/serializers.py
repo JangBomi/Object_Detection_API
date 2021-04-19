@@ -108,10 +108,29 @@ class RecordDetailSerializer(serializers.ModelSerializer):
             'detectedItem',
             'image',
             'captureTime',
-            'recordId'
+            'recordId_id'
         )
-    
 
+    detectedItem = serializers.CharField()
+    image = serializers.CharField()
+    captureTime = serializers.DateTimeField()
+    recordId_id = serializers.IntegerField()
+
+    def create(self, validated_data):
+        recordDetail = RecordDetail.objects.create(
+            detectedItem=validated_data['detectedItem'],
+            image=validated_data['image'],
+            captureTime=validated_data['captureTime'],
+            recordId_id=validated_data['recordId_id'],
+        )
+
+        recordDetail.save()
+        return recordDetail
+
+    def get(self, validated_data):
+        recordDetail = RecordDetail.objects.get(recordId_id=validated_data['id'])
+
+        return recordDetail
 
 
 class PostSerializer(serializers.ModelSerializer):
