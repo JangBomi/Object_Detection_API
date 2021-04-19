@@ -5,7 +5,6 @@ from knox.models import AuthToken
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 
-
 from .models import Post, Notes, User
 from .serializers import (
     PostSerializer,
@@ -64,7 +63,6 @@ def login(request):
         if serializer.validated_data['email'] == "None":
             return Response({'message': 'fail'}, status=status.HTTP_200_OK)
 
-
         response = {
             'success': 'True',
             'token': serializer.data['token']
@@ -72,7 +70,7 @@ def login(request):
         return Response(response, status=status.HTTP_200_OK)
 
 
-#data=request.query_param
+# data=request.query_param
 
 
 @api_view(['POST', 'GET'])
@@ -105,15 +103,28 @@ def record(request):
         return Response(response, status=status.HTTP_201_CREATED)
 
 
-@api_view(['POST'])
+@api_view(['POST', 'GET'])
 @permission_classes([AllowAny])
-def recordDetail(request):
+def recordDetail(request, recordId_id):
+    if request.method == 'GET':
+        serializer = RecordDetailSerializer()
+
+        response = {
+            'success': True,
+            'message': "successfully get record",
+            'data': serializer.get(recordId_id)
+        }
+
+        return Response(response, status=status.HTTP_200_OK)
+
+        # if recordId_id is None:
     if request.method == 'POST':
         serializer = RecordDetailSerializer(data=request.data)
 
         if not serializer.is_valid(raise_exception=True):
             return Response({"success": False, "message": "Error."}, status=status.HTTP_409_CONFLICT)
 
+        #serializer.create(validated_data=request.data)
         serializer.save()
 
         response = {

@@ -121,16 +121,17 @@ class RecordDetailSerializer(serializers.ModelSerializer):
             detectedItem=validated_data['detectedItem'],
             image=validated_data['image'],
             captureTime=validated_data['captureTime'],
-            recordId_id=validated_data['recordId_id'],
+            recordId_id=validated_data['recordId_id']
         )
 
         recordDetail.save()
         return recordDetail
 
-    def get(self, validated_data):
-        recordDetail = RecordDetail.objects.get(recordId_id=validated_data['id'])
+    def get(self, recordId_id):
+        queryset = RecordDetail.objects.all().filter(recordId_id=recordId_id)
+        recordDetail = RecordDetailSerializer(queryset, many=True)
 
-        return recordDetail
+        return recordDetail.data
 
 
 class PostSerializer(serializers.ModelSerializer):
