@@ -1,7 +1,7 @@
 #from django.contrib.auth.models import User
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Post, Notes, User
+from .models import Post, Notes, User, Record, RecordDetail
 from rest_framework_jwt.settings import api_settings
 from django.contrib.auth.models import update_last_login
 from django.contrib.auth import authenticate
@@ -60,6 +60,46 @@ class LoginSerializer(serializers.Serializer):
         }
 
 
+class RecordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Record
+        fields = (
+            'title',
+            'startTime',
+            'endTime',
+            'recordNum',
+            'etc',
+            'userId'
+        )
+
+    title = serializers.CharField(max_length=255)
+    startTime = serializers.DateTimeField()
+    endTime = serializers.DateTimeField
+    recordNum = serializers.IntegerField()
+    etc = serializers.CharField(max_length=255)
+    userId = serializers.IntegerField
+
+    def create(self, validated_data):
+        record = Record.objects.create(
+            title=validated_data['title'],
+            startTime=validated_data['startTime'],
+            endTime=validated_data['endTime'],
+            recordNum=validated_data['recordNum'],
+            etc=validated_data['etc'],
+            userId=validated_data['userId']
+        )
+
+        record.save()
+        return record
+
+    def get_all(self):
+        queryset = Record.objects.all()
+        record = RecordSerializer(queryset, many=True)
+
+        return record.data
+
+
+
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         fields = (
@@ -98,6 +138,8 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ("id", "username")
 
+
+#blogs = Blog.objects.filter(author=author).values_list('id', flat=True)
 
 # 로그인 시리얼라이저
 

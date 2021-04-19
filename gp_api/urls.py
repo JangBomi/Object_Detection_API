@@ -20,7 +20,8 @@ urlpatterns = [
     url("^notes/(?P<pk>[0-9]+)/$", note_detail, name="note-detail"),
     url("^auth/register/$", RegistrationAPI.as_view()),
     url("^auth/user/$", UserAPI.as_view()),
-    path('create/', views.createUser),
-    path('login/', views.login),
+    path('signup', views.createUser),
+    path('signin', views.login),
+    path('home/record', views.record),
 ]
 

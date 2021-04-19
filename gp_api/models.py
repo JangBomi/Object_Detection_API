@@ -92,7 +92,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Record(models.Model):
     title = models.CharField(max_length=255)
     startTime = models.DateTimeField()
-    endTime = models.DateTimeField
+    endTime = models.DateTimeField()
     recordNum = models.IntegerField()
     etc = models.CharField(max_length=255)
     userId = models.ForeignKey(

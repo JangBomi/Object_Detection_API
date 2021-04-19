@@ -19,3 +19,6 @@ python manage.py showmigrations <app-name>
 
 # 지정 마이그레이션의 SQL 내역
 python manage.py sqlmigrate <app-name> <migration-name>
+
+# db 실행
+./manage.py dbshell
